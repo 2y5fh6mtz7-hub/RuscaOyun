@@ -3,6 +3,18 @@ import json
 import os
 import pandas as pd
 
+# 2. Arayüz Ayarları (En başa aldık)
+st.set_page_config(page_title="Rusça Zindan Oyunu", layout="centered")
+
+# --- BAŞLATMA KISMI (Eksik olan buydu) ---
+if "oyun_aktif" not in st.session_state:
+    st.session_state["oyun_aktif"] = False
+if "kelimeler" not in st.session_state:
+    st.session_state["kelimeler"] = []
+if "hatali_kelimeler" not in st.session_state:
+    st.session_state["hatali_kelimeler"] = []
+# ----------------------------------------
+
 # 1. Seri Sistemini Yükle
 def get_durum():
     if not os.path.exists("durum.json"):
@@ -12,8 +24,6 @@ def get_durum():
 
 durum = get_durum()
 
-# 2. Arayüz Ayarları
-st.set_page_config(page_title="Rusça Zindan Oyunu", layout="centered")
 st.title("🇷🇺 Rusça Zindan Oyunu")
 
 st.sidebar.header("İstatistikler")
@@ -38,7 +48,7 @@ if st.session_state.get("oyun_aktif"):
         rusca, turkce = st.session_state["kelimeler"][0]
         
         st.write("---")
-        cevap = st.text_input(f"'{rusca}' kelimesinin Türkçe karşılığı nedir?")
+        cevap = st.text_input(f"'{rusca}' kelimesinin Türkçe karşılığı nedir?", key="cevap_input")
         
         if st.button("Kontrol Et"):
             if cevap.lower() == turkce:
@@ -62,6 +72,3 @@ if st.session_state.get("oyun_aktif"):
         if st.button("Yeni Oyun Başlat"):
             st.session_state["oyun_aktif"] = False
             st.rerun()
-
-            # yorum satırı
-            #
